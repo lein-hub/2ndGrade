@@ -17,8 +17,6 @@ public class TextTranslator extends JFrame {
 		super("텍스트 변환");
 		
 		
-		
-		
 		textIn = new JTextArea(10,14);
 		textOut = new JTextArea(10,14);
 		textIn.setLineWrap(true);
@@ -69,21 +67,23 @@ public class TextTranslator extends JFrame {
 			String jsonData = api.answer(input);
 			String output = "";
 			
-			try {
-				JSONParser jsonParse = new JSONParser();
-				
-				JSONObject jsonObj = (JSONObject) jsonParse.parse(jsonData);
-				
-				JSONObject msgObj = (JSONObject) jsonObj.get("message");
-				
-				JSONObject resultObj = (JSONObject) msgObj.get("result");
-				
-				output = resultObj.get("translatedText").toString();
-				
-				
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				JSONParser jsonParse = new JSONParser();
+//				
+//				JSONObject jsonObj = (JSONObject) jsonParse.parse(jsonData);
+//				
+//				JSONObject msgObj = (JSONObject) jsonObj.get("message");
+//				
+//				JSONObject resultObj = (JSONObject) msgObj.get("result");
+//				
+//				output = resultObj.get("translatedText").toString();
+//				
+//				
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+			
+			output = jsonData.substring(jsonData.indexOf("translatedText\":\"")+"translatedText\":\"".length(), jsonData.indexOf("\",\"engineType"));
 			
 			return output;
 		}
