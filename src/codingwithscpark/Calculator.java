@@ -7,34 +7,39 @@ public class Calculator extends JPanel implements ActionListener {
 	private JPanel panel;
 	private JTextField text;
 	private JButton[] buttons;
-	private String[] labels = {"Backspace", "", "", "CE", "C", "7", "8", "9", "/", "sqrt", "4", "5", "6", "x", "%", "1", "2", "3", "-", "1/x", "0", "-/+", ".", "+", "=" };
+	private String[] labels = {"%", "CE", "C", "¡ç", "1/x", "x©÷", "©÷¡îx", "¡À", "7", "8", "9", "¡¿", "4", "5", "6", "-", "1", "2", "3", "+", "+/-", "0", ".", "="};
 	private double result = 0;
 	private String operator = "=";
 	private boolean startOfNumber = true;
 	
 	public Calculator() {
+		this.setLayout(new BorderLayout());
 		text = new JTextField(35);
 		panel = new JPanel();
 		text.setText("0.0");
 		
-		panel.setLayout(new GridLayout(0,5,3,3));
+		panel.setLayout(new GridLayout(0,4,3,3));
+		panel.setBackground(new Color(221,226,229));
 		buttons = new JButton[25];
 		int index = 0;
-		for (int rows = 0; rows<5; rows++) {
-			for (int cols = 0; cols<5; cols++) {
+		for (int rows = 0; rows<6; rows++) {
+			for (int cols = 0; cols<4; cols++) {
 				buttons[index] = new JButton(labels[index]);
-				if (cols >=3) 
-					buttons[index].setForeground(Color.red);
-				else
-					buttons[index].setForeground(Color.blue);
-				buttons[index].setBackground(Color.DARK_GRAY);
+				if (rows<2 || rows>1 && cols>2) {
+					buttons[index].setBackground(new Color(229,232,234));
+					buttons[index].setFont(new Font("SansSerif", Font.PLAIN, 20));
+				}
+				else {
+					buttons[index].setBackground(new Color(250,250,250));
+					buttons[index].setFont(new Font("SansSerif", Font.BOLD, 20));
+				}
 				panel.add(buttons[index]);
 				buttons[index++].addActionListener(this);
 			}
 		}
-		
+		this.setBackground(new Color(221,226,229));
 		this.add(text, BorderLayout.NORTH);
-		this.add(panel, BorderLayout.CENTER);
+		this.add(panel, BorderLayout.SOUTH);
 	}
 		
 		
@@ -53,6 +58,9 @@ public class Calculator extends JPanel implements ActionListener {
 			else
 				text.setText(text.getText()+com);
 			startOfNumber = false;
+		} else if (com.equals("¡ç")) {
+			if (text.getText().length()>0 && !startOfNumber)
+			text.setText(text.getText().substring(0, text.getText().length()-1));
 		} else {
 			if (startOfNumber) {
 				if (com.equals("-")) {
@@ -72,8 +80,19 @@ public class Calculator extends JPanel implements ActionListener {
 	}
 	
 	private void calculate(double x) {
-		// TODO Auto-generated method stub
-		
+		switch (operator) {
+		case "+":
+			result += x; break;
+		case "-":
+			result -= x; break;
+		case "¡¿":
+			result *= x; break;
+		case "¡À":
+			result /= x; break;
+		case "=":
+			result = x; break;
+		}
+		text.setText(String.valueOf(result));
 	}
 
 
