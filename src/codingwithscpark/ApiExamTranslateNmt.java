@@ -10,7 +10,11 @@ import java.util.*;
 // 네이버 기계번역 (Papago SMT) API 예제
 public class ApiExamTranslateNmt {
 
-    public String answer (String input) {
+    public class MyArrayList {
+
+	}
+
+	public String answer (String input) {
         String clientId = "LMBZrVTrlvvKDwotgzAN";//애플리케이션 클라이언트 아이디값";
         String clientSecret = "dRDTqA0dq0";//애플리케이션 클라이언트 시크릿값";
 
