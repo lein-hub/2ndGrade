@@ -1,5 +1,7 @@
 package codingwithscpark.collection;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 public class MyLinkedList {
@@ -76,6 +78,10 @@ public class MyLinkedList {
 		IntStream.rangeClosed(1,  10).forEach(i -> list.add(i));
 		
 		System.out.println(list);
+		
+		Set<Integer> set = new HashSet<>();
+		
+		
 
 		for (int i=0; i<list.size(); i++) {
 			System.out.println(list.get(i));

@@ -4,7 +4,7 @@ import java.util.stream.IntStream;
 
 public class Test {
 	public static void main(String[] args) {
-		test1();
+		test0();
 	}
 	
 	private static void test1() {
@@ -51,7 +51,7 @@ public class Test {
 		System.out.println("elapsed time:" + (endTime-startTime));
 	}
 	
-	public void test0() {
+	public static void test0() {
 		List<String> list = new ArrayList<>();
 		
 		list.add("Milk");
@@ -83,7 +83,7 @@ public class Test {
 		Iterator<String> iter = list.iterator();
 		
 		while (iter.hasNext()) {
-			iter.next();
+			System.out.println(iter.next());
 		}
 	}
 }

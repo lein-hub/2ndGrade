@@ -33,6 +33,8 @@ public class PriorityQueueTest {
 		q.add(new Task(6, "작업5"));
 		q.add(new Task(3, "작업6"));
 		
+		Queue<Integer> iq = new PriorityQueue<>((o1, o2) -> o2.compareTo(o1));
+		
 		while (q.size()>0) {
 			Task task = q.poll();
 			System.out.println(task);

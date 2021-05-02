@@ -15,7 +15,7 @@ public class SortTest {
 		System.out.println(selectionSort(list));
 	}
 
-	private static <T extends Comparable> List<T> selectionSort(List<T> list) {
+	private static <T extends Comparable<T>> List<T> selectionSort(List<T> list) {
 		
 		for (int i=0; i<list.size(); i++) {
 			int idx = i;
