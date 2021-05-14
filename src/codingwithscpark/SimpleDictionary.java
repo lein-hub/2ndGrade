@@ -10,6 +10,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -22,6 +27,9 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 	private JButton searchBtn = new JButton("검색");
 	private JButton addBtn = new JButton("추가");
 	private Properties props;
+	
+	private static final String JDBC_CLASS_NAME = "org.mariadb.jdbc.Driver";
+	private static final String DB_URL = "jdbc:mariadb://localhost:3306/oop3";
 	
 	// 한영사전 : 한글단어와 대응되는 영어단어의 쌍을 저장
 	private Map<String, String> dict = new HashMap<>();
@@ -36,9 +44,47 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 		addBtn.addActionListener(this);
 		
 		this.setPreferredSize(new Dimension(600, 50));
-		buildDictionaryFromFile();
+//		buildDictionaryFromFile();
+		
+		// JDBC 드라이버를 메모리에 적재하기
+		// JDBC 드라이버 클래스이름은 DBMS마다 다르다
+		try {
+			Class.forName(JDBC_CLASS_NAME);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		buildDictionaryFromDB();
 	}
 	
+	private void buildDictionaryFromDB() {
+		// 데이터베이스에 연결하기
+		try (Connection con = DriverManager.getConnection(DB_URL, "root", "")) {
+			String sql = "select * from dict";  // 쿼리
+			PreparedStatement pst = con.prepareStatement(sql);  // PreparedStatement 는 실행준비가 완료된 SQL 객체 (실행된게 아님)
+			
+			// Insert, Delete, Update 문의 실행은 executeUpdate() 메서드를 실행
+			// select 문은 executeQuery() 메서드를 실행
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+//				rs.getString(1);
+				String key = rs.getString("kor");
+				String value = rs.getString("eng");
+				
+				System.out.println(key + ":" + value);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	private void addWordToDB(String key, String value) {
+		
+	}
+
 	private void buildDictionaryFromFile() {
 		props = new Properties();
 		try(FileReader reader = new FileReader(DIC_FILE_NAME)) {
