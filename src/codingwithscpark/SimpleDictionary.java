@@ -110,7 +110,7 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 		}
 	}
 	
-	private void addWorldToFile(String key, String value) {
+	private void addWordToFile(String key, String value) {
 		try(FileWriter writer = new FileWriter(DIC_FILE_NAME, true)) {
 			String str = key + "=" + value + "\n";
 			writer.write(str);
@@ -154,6 +154,7 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 		String key = inputField.getText();
 		if (key.trim().length() == 0) return;
 		System.out.println(key);
+		
 		if (e.getSource() == searchBtn) {
 			// inputField에 입력된 단어를 추출
 			// dict 맵 객체에서 그 단어에 대응되는 영단어를 디스플레이
@@ -180,13 +181,7 @@ public class SimpleDictionary extends JPanel implements ActionListener{
 //			}
 			
 			// addWordToFile
-			try(FileWriter writer = new FileWriter(DIC_FILE_NAME, true)) {
-				String str = key + "=" + eng + "\n";
-				writer.write(str);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			addWordToFile(key, eng);
 			
 			// addWordToDB
 			addWordToDB(key, eng);
