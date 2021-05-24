@@ -51,7 +51,9 @@ public class TableViewer extends JFrame implements ActionListener{
 		this.add(finBtn);
 		
 		this.setSize(350, 200);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(this.DO_NOTHING_ON_CLOSE);
+		this.setResizable(false);
 		this.setVisible(true);
 		/*
 		 * TableViewr 객체가 생성될 때, DB의 books 테이블의 레코드들을 읽어온다.
@@ -92,15 +94,65 @@ public class TableViewer extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == prevBtn) {
-			getPrev(rs);
+		try {
+			if (e.getSource() == nextBtn) {
+				if (rs.next()) {}
+				else rs.first();
+				setTexts();
+				
+			}
+			else if (e.getSource() == prevBtn) {
+				if (rs.previous()) {}
+				else rs.last();
+				setTexts();
+			}
+			else if (e.getSource() == insBtn) {
+				// 이미 DB는 연결되어 있고
+				// 이미 연결 정보를 가지고 있는 Connection 객체를
+				// insert 문을 이용해 prepare 하고
+				// 반환된 PreparedStatement 객체를 이용해서
+				// 실행요청을 서버에 보낸다
+				String sql = "insert into books(title, publisher, year, price) values(?, ?, ?, ?)";
+				PreparedStatement pst = con.prepareStatement(sql);
+				
+				try {
+					pst.setString(1, this.titleField.getText());
+					pst.setString(2, this.publisherField.getText());
+					pst.setDate(3, Date.valueOf(this.yearField.getText()));
+					pst.setInt(4, Integer.valueOf(this.priceField.getText()));
+					pst.executeUpdate();
+					
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(this, "등록 실패 ["+e1.getMessage()+"]");
+					e1.printStackTrace();
+				}
+				
+				pst = con.prepareStatement("select * from books order by book_id");
+				rs.close();
+				rs = pst.executeQuery();
+				rs.last();
+				setTexts();
+			}
+			else if (e.getSource() == finBtn) {
+				con.close();
+				this.dispose();
+				System.exit(EXIT_ON_CLOSE);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
 	}
 
-	private void getPrev(ResultSet rs) {
-		
+	private void setTexts() {
+		try {
+			this.idField.setText(rs.getString("book_id"));
+			this.titleField.setText(rs.getString("title"));
+			this.publisherField.setText(rs.getString("publisher"));
+			this.yearField.setText(rs.getDate("year").toString());
+			this.priceField.setText(String.valueOf(rs.getInt("price")));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	
-
 }
