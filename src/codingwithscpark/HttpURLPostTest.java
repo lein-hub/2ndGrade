@@ -5,7 +5,7 @@ import java.io.*;
 
 public class HttpURLPostTest {
 	public static void main(String[] args) {
-		String site = "http://localhost:8080/board/test";
+		String site = "http://localhost:9090/todos";
 		try {
 			URL url = new URL(site);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
